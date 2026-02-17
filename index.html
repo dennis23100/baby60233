@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Happy Birthday 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&family=Caveat:wght@400;700&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  
+<!-- ★ PORTRAIT ROTATION WARNING ★ -->
+<div id="portrait-warning">
+  <div class="rotate-icon">📱</div>
+  <div class="rotate-text">
+    請將手機橫放<br>
+    以獲得最佳體驗 🎀
+  </div>
+</div>
+
+<!-- ★ MUSIC TOGGLE (audio handled in JS for playlist) ★ -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">🔇</button>
+
+<!-- ★ GAME CONTAINER (landscape only) ★ -->
+<div id="game-container">
+
+  <!-- Floating decorations -->
+  <div class="floating-decorations" id="floatingDeco"></div>
+
+  <!-- ================================================ -->
+  <!-- OPENING SCREEN                                   -->
+  <!-- ================================================ -->
+  <div id="screen-opening">
+    <div class="opening-content">
+      <div class="opening-title">Happy Birthday!</div>
+      <p class="opening-subtitle">
+        這是一份專屬於妳的禮物 🎁<br>
+        在這個可愛的小世界裡探索<br>
+        收集祝福、完成挑戰 💕
+      </p>
+
+      <div class="envelope-container">
+        <div class="envelope" id="envelope" onclick="openEnvelope()">
+          <div class="envelope-flap"></div>
+          <div class="envelope-heart">💌</div>
+          <div class="envelope-letter">
+            準備好了嗎？<br>一起來冒險吧！✨
+          </div>
+        </div>
+      </div>
+
+      <p class="opening-date">我們的故事，從那天開始…</p>
+
+      <div style="margin-top:16px;">
+        <button class="cute-btn" id="startBtn" style="opacity:0;pointer-events:none;transition:all .5s;" onclick="enterMap()">
+          💖 進入冒險 💖
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- GAME MAP                                         -->
+  <!-- ================================================ -->
+  <div id="screen-map">
+    <!-- HUD -->
+    <div class="hud">
+      <div class="hud-left">
+        <div class="hud-item">
+          <span>🎮</span>
+          <span id="hudGames">0/3</span>
+        </div>
+        <div class="hud-hint">移動探索地圖，靠近互動！</div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-item">
+          <span>💬</span>
+          <div class="hud-hearts" id="hudNpc"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map viewport -->
+    <div class="map-viewport" id="mapViewport">
+      <div class="map-world" id="mapWorld"></div>
+    </div>
+
+    <!-- Joystick -->
+    <div class="joystick-container" id="joystickContainer">
+      <div class="joystick-base" id="joystickBase">
+        <div class="joystick-stick" id="joystickStick"></div>
+      </div>
+    </div>
+
+    <!-- Interact button -->
+    <button class="interact-btn" id="interactBtn">互動</button>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- DIALOGUE OVERLAY                                 -->
+  <!-- ================================================ -->
+  <div class="dialogue-overlay" id="dialogueOverlay">
+    <div class="dialogue-box" id="dialogueBox">
+      <div class="dialogue-npc-icon" id="dialogueIcon"></div>
+      <div class="dialogue-npc-name" id="dialogueName"></div>
+      <div class="dialogue-text" id="dialogueText"></div>
+      <button class="dialogue-close" onclick="closeDialogue()">好的！💕</button>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- GAME 1: MEMORY MATCH                             -->
+  <!-- ================================================ -->
+  <div class="game-screen" id="game-memory">
+    <div class="memory-container">
+      <div class="memory-top-bar">
+        <button class="game-back-btn" onclick="exitMiniGame()">← 返回地圖</button>
+        <div class="badge">🏠 記憶小屋</div>
+        <div class="match-info">
+          <span>翻牌：<strong id="matchMoves">0</strong></span>
+          <span>配對：<strong id="matchPairs">0</strong>/8</span>
+        </div>
+      </div>
+      <div class="match-grid" id="matchGrid"></div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- GAME 2: QUIZ                                     -->
+  <!-- ================================================ -->
+  <div class="game-screen" id="game-quiz">
+    <button class="game-back-btn" onclick="exitMiniGame()">← 返回地圖</button>
+    <div class="badge">💕 問答亭</div>
+    <div class="game-title-area">
+      <div class="stage-title">💝 愛情問答</div>
+      <div class="stage-desc">來回答關於我們的問題吧！</div>
+    </div>
+    <div class="quiz-card" id="quizCard"></div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- GAME 3: SCRATCH CARD (刮刮樂)                    -->
+  <!-- ================================================ -->
+  <div class="game-screen" id="game-scratch">
+    <button class="game-back-btn" onclick="exitMiniGame()">← 返回地圖</button>
+
+    <!-- Phase 1: Scratch -->
+    <div id="scratchPhase1">
+      <div class="badge">🎁 驚喜禮盒</div>
+      <div class="game-title-area">
+        <div class="stage-title">🎁 刮刮樂</div>
+        <div class="stage-desc">用手指刮開，揭開隱藏的驚喜！</div>
+      </div>
+      <div class="scratch-wrapper" id="scratchWrapper">
+        <div class="scratch-photo">
+          <img id="scratchImg" src="picture/20250405_151905.jpg" alt="hidden photo">
+        </div>
+        <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+      </div>
+      <div class="scratch-progress">
+        <div class="scratch-progress-bar">
+          <div class="scratch-progress-fill" id="scratchProgressFill"></div>
+        </div>
+        <div class="scratch-hint" id="scratchHint">用手指刮開灰色區域 ✨</div>
+      </div>
+    </div>
+
+    <!-- Phase 2: Puzzle -->
+    <div class="puzzle-container" id="puzzlePhase2">
+      <div class="badge">🧩 拼圖挑戰</div>
+      <div class="game-title-area">
+        <div class="stage-title">🧩 把照片拼回來！</div>
+        <div class="stage-desc">點擊空格旁邊的碎片來移動它</div>
+      </div>
+      <div class="puzzle-board" id="puzzleBoard"></div>
+      <div class="puzzle-info">
+        <span>移動次數：<strong id="puzzleMoves">0</strong></span>
+      </div>
+      <div class="puzzle-hint-text">💡 點擊相鄰的碎片滑到空格位置</div>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- UNLOCK OVERLAY                                   -->
+  <!-- ================================================ -->
+  <div class="unlock-overlay" id="unlockOverlay">
+    <div class="unlock-card">
+      <div class="unlock-icon" id="unlockIcon">🔓</div>
+      <div class="unlock-title" id="unlockTitle">回憶解鎖！</div>
+      <div class="unlock-text" id="unlockText"></div>
+      <div class="unlock-photo" id="unlockPhoto" style="display:none;"></div>
+      <button class="cute-btn" onclick="closeUnlock()" style="margin-top:10px;font-size:14px;padding:10px 24px;">
+        繼續探索 →
+      </button>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- PASSWORD OVERLAY (treasure chest)                -->
+  <!-- ================================================ -->
+  <div class="password-overlay" id="passwordOverlay">
+    <div class="password-card">
+      <div class="password-chest">🎁</div>
+      <div class="password-title">神秘寶箱</div>
+      <div class="password-question">寶貝你覺得我想對你說什麼<br><span class="password-hint">(4位數字)</span></div>
+      <div class="password-input-row">
+        <input type="tel" class="password-input" id="passwordInput" maxlength="4" placeholder="____" autocomplete="off">
+      </div>
+      <div class="password-error" id="passwordError">密碼不對喔～再想想 💭</div>
+      <button class="cute-btn" onclick="submitPassword()" style="margin-top:12px;font-size:14px;padding:10px 28px;">
+        解鎖 🔓
+      </button>
+    </div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- PHOTO SLIDESHOW                                  -->
+  <!-- ================================================ -->
+  <div class="slideshow-screen" id="slideshowScreen">
+    <div class="confetti-container" id="confettiBox"></div>
+    <div class="slideshow-container" id="slideshowContainer">
+      <div class="slideshow-photo" id="slideshowPhoto"></div>
+    </div>
+    <div class="slideshow-counter" id="slideshowCounter"></div>
+  </div>
+
+  <!-- ================================================ -->
+  <!-- LETTER SCREEN                                    -->
+  <!-- ================================================ -->
+  <div class="screen" id="screen-letter">
+    <div class="letter-wrapper">
+      <div class="letter-envelope-top"></div>
+      <div class="letter-paper">
+        <div class="letter-deco-top">💌</div>
+        <div class="letter-body" id="letterBody"></div>
+        <div class="letter-sign">永遠愛妳的我 ❤️</div>
+      </div>
+      <button class="cute-btn letter-btn" id="letterVideoBtn" onclick="openVideo()">
+        寶貝我超級超級愛妳喔 💕
+      </button>
+    </div>
+  </div>
+
+</div><!-- /game-container -->
+
+<!-- Scripts -->
+<script src="js/config.js"></script>
+<script src="js/games.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
