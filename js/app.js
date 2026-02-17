@@ -14,6 +14,7 @@ const gameState = {
 let player = { x: 800, y: 800, speed: 4.5, walking: false };
 let keys = {};
 let joystickVec = { x: 0, y: 0 };
+let tapTarget = null; // {x, y} for tap-to-move
 let nearEntity = null;
 let animFrame = null;
 
@@ -181,13 +182,33 @@ function startGameLoop() {
 
 function movePlayer() {
   let dx = 0, dy = 0;
+
+  // Keyboard input
   if (keys['ArrowUp'] || keys['w'] || keys['W']) dy = -1;
   if (keys['ArrowDown'] || keys['s'] || keys['S']) dy = 1;
   if (keys['ArrowLeft'] || keys['a'] || keys['A']) dx = -1;
   if (keys['ArrowRight'] || keys['d'] || keys['D']) dx = 1;
 
+  // Joystick input
   if (Math.abs(joystickVec.x) > 0.1 || Math.abs(joystickVec.y) > 0.1) {
     dx = joystickVec.x; dy = joystickVec.y;
+    tapTarget = null; // cancel tap-to-move when joystick used
+  }
+
+  // Keyboard/joystick cancels tap target
+  if (dx !== 0 || dy !== 0) tapTarget = null;
+
+  // Tap-to-move
+  if (tapTarget && dx === 0 && dy === 0) {
+    const tdx = tapTarget.x - player.x;
+    const tdy = tapTarget.y - player.y;
+    const tdist = Math.hypot(tdx, tdy);
+    if (tdist < 8) {
+      tapTarget = null; // arrived
+    } else {
+      dx = tdx / tdist;
+      dy = tdy / tdist;
+    }
   }
 
   const mag = Math.sqrt(dx * dx + dy * dy);
@@ -320,6 +341,57 @@ function handleInteract() {
   window.addEventListener('mousemove', e => { if (!dragging) return; handleMove(e.clientX, e.clientY); });
   window.addEventListener('mouseup', () => { if (dragging) reset(); });
 })();
+
+// ---------- Tap-to-Move on Map ----------
+(function initTapToMove() {
+  const viewport = document.getElementById('mapViewport');
+  let tapStartTime = 0;
+  let tapStartPos = { x: 0, y: 0 };
+
+  // Use pointerdown/pointerup for unified mouse+touch handling
+  viewport.addEventListener('pointerdown', e => {
+    tapStartTime = Date.now();
+    tapStartPos = { x: e.clientX, y: e.clientY };
+  });
+
+  viewport.addEventListener('pointerup', e => {
+    if (!gameState.onMap) return;
+    const dt = Date.now() - tapStartTime;
+    const moved = Math.hypot(e.clientX - tapStartPos.x, e.clientY - tapStartPos.y);
+    // Only count as tap if quick and didn't drag
+    if (dt > 300 || moved > 15) return;
+
+    // Ignore if tapped on joystick or interact button area
+    const tag = e.target.closest('.joystick-container, .interact-btn, .hud, .npc, .map-building');
+    if (tag) return;
+
+    // Convert screen position to map world coordinates
+    const world = document.getElementById('mapWorld');
+    const transform = world.style.transform;
+    const match = transform.match(/translate\((-?[\d.]+)px,\s*(-?[\d.]+)px\)/);
+    const offsetX = match ? parseFloat(match[1]) : 0;
+    const offsetY = match ? parseFloat(match[2]) : 0;
+    const vpRect = viewport.getBoundingClientRect();
+
+    const worldX = (e.clientX - vpRect.left) - offsetX;
+    const worldY = (e.clientY - vpRect.top) - offsetY;
+
+    tapTarget = { x: Math.max(25, Math.min(1575, worldX)), y: Math.max(25, Math.min(1575, worldY)) };
+
+    // Show tap indicator
+    showTapIndicator(worldX, worldY);
+  });
+})();
+
+function showTapIndicator(wx, wy) {
+  const world = document.getElementById('mapWorld');
+  const ind = document.createElement('div');
+  ind.className = 'tap-indicator';
+  ind.style.left = wx + 'px';
+  ind.style.top = wy + 'px';
+  world.appendChild(ind);
+  setTimeout(() => ind.remove(), 600);
+}
 
 // ---------- NPC Dialogue ----------
 function showDialogue(npc) {
