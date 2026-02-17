@@ -475,7 +475,8 @@ html, body {
 
 /* --- Virtual Joystick --- */
 .joystick-container {
-  position:absolute; bottom:16px; left:16px; z-index:150;
+  position:absolute; bottom:50%; left:16px; z-index:150;
+  transform:translateY(50%);
   width:100px; height:100px;
   touch-action:none;
 }
@@ -496,9 +497,24 @@ html, body {
   box-shadow:0 2px 12px rgba(255,133,162,.45);
 }
 
+/* --- Tap-to-move indicator --- */
+.tap-indicator {
+  position:absolute; width:24px; height:24px;
+  margin-left:-12px; margin-top:-12px;
+  border:2px solid var(--melody-deep);
+  border-radius:50%; pointer-events:none;
+  animation:tapRipple .6s ease forwards;
+  z-index:45;
+}
+@keyframes tapRipple {
+  0% { transform:scale(.3); opacity:.8; }
+  100% { transform:scale(1.5); opacity:0; }
+}
+
 /* --- Interact Button --- */
 .interact-btn {
-  display:none; position:absolute; bottom:36px; right:20px; z-index:150;
+  display:none; position:absolute; bottom:50%; right:20px; z-index:150;
+  transform:translateY(50%);
   width:58px; height:58px; border-radius:50%;
   background:linear-gradient(135deg,var(--gold),var(--gold-dark));
   border:3px solid var(--white-50);
@@ -1123,10 +1139,10 @@ html, body {
   .hud { padding:3px 10px; }
   .hud-item { font-size:10px; }
   .hud-hint { font-size:8px; padding:2px 5px; }
-  .joystick-container { bottom:10px; left:10px; width:80px; height:80px; }
+  .joystick-container { left:10px; width:80px; height:80px; }
   .joystick-base { width:80px; height:80px; }
   .joystick-stick { width:34px; height:34px; }
-  .interact-btn { width:50px; height:50px; font-size:10px; bottom:24px; right:14px; }
+  .interact-btn { width:50px; height:50px; font-size:10px; right:14px; }
   .match-grid { gap:3px; height:calc(100vh - 48px); width:calc(100vh - 48px); }
   .opening-title { font-size:28px; }
   .opening-subtitle { font-size:11px; margin:2px 0 4px; line-height:1.5; }
