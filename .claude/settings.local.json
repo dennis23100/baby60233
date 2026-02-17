@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(magick:*)",
+      "Bash(ffmpeg:*)",
+      "WebFetch(domain:drive.google.com)",
+      "Bash(du -sh:*)"
+    ]
+  }
+}
