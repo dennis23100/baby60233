@@ -40,7 +40,6 @@ html, body {
   background:#000;
   color:var(--text-dark);
   -webkit-tap-highlight-color:transparent;
-  touch-action:none;
   user-select:none;
   -webkit-user-select:none;
 }
@@ -82,7 +81,7 @@ html, body {
    KEYFRAME ANIMATIONS
    ============================================================ */
 @keyframes fadeIn {
-  from { opacity:0; transform:translateY(15px); }
+  from { opacity:0; transform:translateY(10px); }
   to { opacity:1; transform:translateY(0); }
 }
 @keyframes fadeInScale {
@@ -150,6 +149,14 @@ html, body {
   75% { border-color:var(--lavender); }
   100% { border-color:var(--melody-pink); }
 }
+@keyframes slideshowIn {
+  0% { opacity:0; transform:scale(.85) rotate(-2deg); }
+  100% { opacity:1; transform:scale(1) rotate(0deg); }
+}
+@keyframes slideshowOut {
+  0% { opacity:1; transform:scale(1) rotate(0deg); }
+  100% { opacity:0; transform:scale(1.1) rotate(2deg); }
+}
 
 /* ============================================================
    COMMON COMPONENTS
@@ -158,8 +165,8 @@ html, body {
 /* --- Buttons --- */
 .cute-btn {
   background:linear-gradient(135deg, var(--melody-deep), var(--melody-hot));
-  color:#fff; border:none; padding:12px 32px;
-  border-radius:var(--radius-full); font-size:16px;
+  color:#fff; border:none; padding:10px 28px;
+  border-radius:var(--radius-full); font-size:14px;
   font-family:'Noto Sans TC',sans-serif; font-weight:700;
   cursor:pointer;
   box-shadow:0 4px 15px rgba(255,92,149,.4);
@@ -181,8 +188,8 @@ html, body {
 .cute-btn-secondary {
   background:rgba(255,255,255,.85);
   color:var(--melody-deep); border:2px solid var(--melody-pink);
-  padding:10px 24px; border-radius:var(--radius-full);
-  font-size:14px; font-family:'Noto Sans TC',sans-serif;
+  padding:8px 20px; border-radius:var(--radius-full);
+  font-size:13px; font-family:'Noto Sans TC',sans-serif;
   font-weight:700; cursor:pointer; transition:all .3s;
 }
 .cute-btn-secondary:hover {
@@ -205,9 +212,9 @@ html, body {
 /* --- Badges --- */
 .badge {
   display:inline-flex; align-items:center; gap:5px;
-  background:var(--white-90); padding:5px 14px;
+  background:var(--white-90); padding:4px 12px;
   border-radius:var(--radius-full);
-  font-size:12px; color:var(--melody-deep); font-weight:700;
+  font-size:11px; color:var(--melody-deep); font-weight:700;
   backdrop-filter:blur(8px);
   box-shadow:0 2px 8px rgba(0,0,0,.06);
 }
@@ -224,47 +231,47 @@ html, body {
 }
 
 /* ============================================================
-   SCREEN: OPENING
+   SCREEN: OPENING  ★ Must fit in mobile landscape (~340px tall)
    ============================================================ */
 #screen-opening {
   position:absolute; inset:0; z-index:20;
   display:flex; align-items:center; justify-content:center;
+  overflow-y:auto; overflow-x:hidden;
   background:
     radial-gradient(ellipse at 30% 40%, rgba(255,200,220,.4) 0%, transparent 60%),
     radial-gradient(ellipse at 70% 60%, rgba(232,213,245,.3) 0%, transparent 50%),
-    /* diamond pattern */
     linear-gradient(45deg, rgba(255,255,255,.07) 25%, transparent 25%),
     linear-gradient(-45deg, rgba(255,255,255,.07) 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, rgba(255,255,255,.07) 75%),
     linear-gradient(-45deg, transparent 75%, rgba(255,255,255,.07) 75%),
     linear-gradient(180deg,#FFF5F9 0%,var(--melody-pink) 60%,var(--melody-deep) 100%);
   background-size: auto, auto, 28px 28px, 28px 28px, 28px 28px, 28px 28px, 100% 100%;
-  text-align:center; padding:20px;
+  text-align:center; padding:12px 16px;
   animation:fadeIn .8s ease;
 }
 .opening-content {
   display:flex; flex-direction:column; align-items:center;
-  max-width:500px;
+  max-width:500px; width:100%;
 }
 .opening-title {
-  font-family:'Caveat',cursive; font-size:48px;
+  font-family:'Caveat',cursive; font-size:clamp(28px, 8vh, 48px);
   color:#fff;
   text-shadow:2px 2px 0 rgba(255,133,162,.4), 0 0 30px rgba(255,255,255,.3);
 }
 .opening-subtitle {
-  font-size:15px; color:var(--white-90);
-  margin:8px 0 18px; line-height:1.9; letter-spacing:.3px;
+  font-size:clamp(11px, 3vh, 15px); color:var(--white-90);
+  margin:4px 0 8px; line-height:1.7; letter-spacing:.3px;
 }
 .opening-date {
-  font-size:12px; color:var(--white-70); margin-top:6px;
+  font-size:11px; color:var(--white-70); margin-top:4px;
 }
 
-/* Envelope */
-.envelope-container { perspective:1000px; margin:10px 0; }
+/* Envelope — compact for landscape mobile */
+.envelope-container { perspective:1000px; margin:6px 0; }
 .envelope {
-  width:220px; height:155px;
+  width:clamp(140px, 35vh, 220px); height:clamp(98px, 24vh, 155px);
   background:linear-gradient(135deg,var(--melody-rose),var(--melody-deep));
-  border-radius:12px; position:relative; margin:0 auto;
+  border-radius:10px; position:relative; margin:0 auto;
   box-shadow:var(--shadow-card), 0 0 40px rgba(255,133,162,.2);
   cursor:pointer; transition:transform .3s;
 }
@@ -273,23 +280,23 @@ html, body {
   position:absolute;top:0;left:0;width:100%;height:50%;
   background:linear-gradient(180deg,var(--melody-deep),var(--melody-hot));
   clip-path:polygon(0 0,50% 100%,100% 0);
-  border-radius:12px 12px 0 0;
+  border-radius:10px 10px 0 0;
   transform-origin:top center; transition:transform .8s ease; z-index:2;
 }
 .envelope.opened .envelope-flap { transform:rotateX(180deg); }
 .envelope-heart {
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-size:42px;z-index:1; animation:heartbeat 1.5s ease infinite;
+  font-size:clamp(24px, 6vh, 42px);z-index:1; animation:heartbeat 1.5s ease infinite;
 }
 .envelope-letter {
-  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
-  width:175px;height:95px;background:#fff;border-radius:8px;
+  position:absolute;bottom:6px;left:50%;transform:translateX(-50%);
+  width:80%;height:55%;background:#fff;border-radius:6px;
   display:flex;align-items:center;justify-content:center;
-  font-size:13px;color:var(--melody-deep);font-weight:700;
-  opacity:0;transition:all .8s ease .4s;padding:8px;text-align:center;line-height:1.6;
+  font-size:clamp(10px, 2.5vh, 13px);color:var(--melody-deep);font-weight:700;
+  opacity:0;transition:all .8s ease .4s;padding:6px;text-align:center;line-height:1.5;
   box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-.envelope.opened .envelope-letter { opacity:1;bottom:20px; }
+.envelope.opened .envelope-letter { opacity:1;bottom:14px; }
 
 /* ============================================================
    SCREEN: GAME MAP
@@ -298,11 +305,13 @@ html, body {
   position:absolute; inset:0; z-index:10;
   display:none; overflow:hidden;
   background:var(--mint);
+  touch-action:none;
 }
 #screen-map.active { display:block; animation:fadeIn .5s ease; }
 
 .map-viewport {
   width:100%; height:100%; position:relative; overflow:hidden;
+  touch-action:none;
 }
 .map-world {
   position:absolute; width:1600px; height:1600px;
@@ -310,7 +319,6 @@ html, body {
     radial-gradient(circle at 20% 25%, rgba(255,200,210,.25) 0%, transparent 35%),
     radial-gradient(circle at 75% 70%, rgba(176,212,232,.25) 0%, transparent 35%),
     radial-gradient(circle at 50% 50%, rgba(232,213,245,.15) 0%, transparent 40%),
-    /* subtle grid pattern */
     linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px),
     linear-gradient(135deg, #c5e8cc 0%, #d4edda 25%, #cfe8d5 50%, #d5ecd8 75%, #c8e6d0 100%);
@@ -440,7 +448,7 @@ html, body {
 /* --- HUD --- */
 .hud {
   position:absolute; top:0;left:0;width:100%;
-  padding:8px 16px; z-index:100;
+  padding:6px 12px; z-index:100;
   display:flex; justify-content:space-between; align-items:center;
   background:linear-gradient(180deg, rgba(255,255,255,.88) 0%, rgba(255,255,255,.75) 100%);
   backdrop-filter:blur(12px);
@@ -452,34 +460,36 @@ html, body {
 }
 .hud-item {
   display:flex; align-items:center; gap:4px;
-  font-size:12px; font-weight:700; color:var(--melody-deep);
+  font-size:11px; font-weight:700; color:var(--melody-deep);
 }
 .hud-hearts { display:flex; gap:1px; }
 .hud-heart {
-  font-size:12px; opacity:.25; transition:all .4s ease;
+  font-size:11px; opacity:.25; transition:all .4s ease;
 }
 .hud-heart.filled { opacity:1; transform:scale(1.1); }
 .hud-hint {
-  font-size:10px; color:var(--text-light);
-  background:rgba(255,255,255,.6); padding:3px 8px;
+  font-size:9px; color:var(--text-light);
+  background:rgba(255,255,255,.6); padding:2px 7px;
   border-radius:8px;
 }
 
 /* --- Virtual Joystick --- */
 .joystick-container {
-  position:absolute; bottom:24px; left:24px; z-index:150;
-  width:110px; height:110px;
+  position:absolute; bottom:16px; left:16px; z-index:150;
+  width:100px; height:100px;
+  touch-action:none;
 }
 .joystick-base {
-  width:110px; height:110px; border-radius:50%;
+  width:100px; height:100px; border-radius:50%;
   background:rgba(255,240,245,.35);
   border:2.5px solid rgba(255,133,162,.3);
   position:relative;
   backdrop-filter:blur(6px);
   box-shadow:inset 0 0 15px rgba(255,182,193,.1);
+  touch-action:none;
 }
 .joystick-stick {
-  width:46px; height:46px; border-radius:50%;
+  width:42px; height:42px; border-radius:50%;
   background:radial-gradient(circle at 40% 35%, var(--melody-pink), var(--melody-deep));
   position:absolute; top:50%; left:50%;
   transform:translate(-50%,-50%);
@@ -488,15 +498,16 @@ html, body {
 
 /* --- Interact Button --- */
 .interact-btn {
-  display:none; position:absolute; bottom:44px; right:24px; z-index:150;
-  width:64px; height:64px; border-radius:50%;
+  display:none; position:absolute; bottom:36px; right:20px; z-index:150;
+  width:58px; height:58px; border-radius:50%;
   background:linear-gradient(135deg,var(--gold),var(--gold-dark));
   border:3px solid var(--white-50);
-  font-size:13px; font-weight:900; color:#fff;
+  font-size:12px; font-weight:900; color:#fff;
   cursor:pointer; box-shadow:0 4px 18px rgba(255,215,0,.45);
   font-family:'Noto Sans TC',sans-serif;
   animation:glow 2s ease infinite;
   line-height:1.2; text-align:center;
+  touch-action:manipulation;
 }
 .interact-btn.visible {
   display:flex; align-items:center; justify-content:center;
@@ -504,67 +515,70 @@ html, body {
 }
 
 /* ============================================================
-   DIALOGUE OVERLAY
+   DIALOGUE OVERLAY  ★ Compact for mobile landscape
    ============================================================ */
 .dialogue-overlay {
   display:none; position:absolute; inset:0;
   background:rgba(0,0,0,.35); z-index:200;
   align-items:center; justify-content:center;
   backdrop-filter:blur(3px);
+  padding:8px;
 }
 .dialogue-overlay.active { display:flex; animation:fadeIn .3s ease; }
 .dialogue-box {
-  background:#fff; border-radius:var(--radius-lg); padding:24px 28px;
-  max-width:400px; width:88%; text-align:center;
+  background:#fff; border-radius:var(--radius-lg); padding:16px 20px;
+  max-width:400px; width:92%; max-height:90vh;
+  overflow-y:auto; text-align:center;
   box-shadow:var(--shadow-card), 0 0 60px rgba(255,133,162,.15);
   position:relative; animation:popIn .4s ease;
 }
 .dialogue-box::before {
   content:''; position:absolute; top:0;left:0;
-  width:100%; height:4px;
+  width:100%; height:3px;
   background:linear-gradient(90deg,var(--melody-pink),var(--gold),var(--sky-blue),var(--melody-pink));
   background-size:300% 100%; animation:shimmer 4s infinite;
   border-radius:var(--radius-lg) var(--radius-lg) 0 0;
 }
 .dialogue-npc-icon {
-  font-size:44px; margin-bottom:6px;
+  font-size:36px; margin-bottom:4px;
   animation:popIn .5s ease;
 }
 .dialogue-npc-name {
-  font-size:14px; font-weight:700; color:var(--melody-deep);
-  margin-bottom:8px; letter-spacing:.5px;
+  font-size:13px; font-weight:700; color:var(--melody-deep);
+  margin-bottom:6px; letter-spacing:.5px;
 }
 .dialogue-text {
-  font-size:14px; line-height:1.9; color:var(--text-dark);
+  font-size:13px; line-height:1.8; color:var(--text-dark);
   white-space:pre-line;
 }
 .dialogue-close {
-  margin-top:14px; background:var(--melody-pink); color:#fff;
-  border:none; padding:8px 28px; border-radius:var(--radius-full);
-  font-size:13px; font-weight:700; cursor:pointer;
+  margin-top:10px; background:var(--melody-pink); color:#fff;
+  border:none; padding:7px 24px; border-radius:var(--radius-full);
+  font-size:12px; font-weight:700; cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;
   transition:all .2s;
 }
 .dialogue-close:hover { background:var(--melody-deep); }
 
 /* ============================================================
-   GAME SCREENS (mini-games)
+   GAME SCREENS (mini-games) ★ All must fit landscape viewport
    ============================================================ */
 .game-screen {
   display:none; position:absolute; inset:0;
   z-index:180;
   flex-direction:column; align-items:center; justify-content:center;
-  padding:12px;
+  padding:8px 12px;
+  overflow-y:auto;
 }
 .game-screen.active { display:flex; animation:fadeInScale .4s ease; }
 
 .game-header {
-  display:flex; align-items:center; gap:12px;
-  margin-bottom:6px;
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:4px;
 }
 .game-back-btn {
   background:var(--white-90); border:2px solid var(--melody-pink);
-  border-radius:var(--radius-full); padding:5px 14px; font-size:12px;
+  border-radius:var(--radius-full); padding:4px 12px; font-size:11px;
   color:var(--melody-deep); font-weight:700; cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;
   transition:all .2s; z-index:5;
@@ -572,23 +586,23 @@ html, body {
 .game-back-btn:hover { background:var(--melody-pink); color:#fff; }
 
 .game-title-area {
-  text-align:center; margin-bottom:4px;
+  text-align:center; margin-bottom:2px;
 }
 .game-title-area .stage-title {
-  font-size:20px; font-weight:900; color:var(--melody-deep);
+  font-size:16px; font-weight:900; color:var(--melody-deep);
 }
 .game-title-area .stage-desc {
-  font-size:12px; color:var(--text-light); margin-top:2px;
+  font-size:11px; color:var(--text-light); margin-top:1px;
 }
 
 /* ============================================================
-   GAME 1: MEMORY MATCH (Photo Cards — landscape fullscreen)
+   GAME 1: MEMORY MATCH
    ============================================================ */
 #game-memory {
   background:
     radial-gradient(ellipse at 30% 30%, rgba(232,213,245,.4) 0%, transparent 50%),
     linear-gradient(180deg,#FFF5F9 0%,var(--lavender) 100%);
-  padding:8px 16px;
+  padding:6px 12px;
   justify-content:center;
 }
 
@@ -600,10 +614,10 @@ html, body {
 .memory-top-bar {
   display:flex; align-items:center; justify-content:space-between;
   width:100%; max-width:720px;
-  padding:4px 0; margin-bottom:6px;
+  padding:2px 0; margin-bottom:4px;
 }
 .match-info {
-  display:flex; gap:16px; font-size:13px; color:var(--text-light);
+  display:flex; gap:12px; font-size:12px; color:var(--text-light);
 }
 .match-info strong { color:var(--melody-deep); }
 
@@ -611,11 +625,10 @@ html, body {
   display:grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  gap:6px;
-  /* fill available height, keep square ratio */
-  height: calc(100vh - 70px);
-  width: calc(100vh - 70px);
-  max-width: 92vw;
+  gap:4px;
+  height: calc(100vh - 56px);
+  width: calc(100vh - 56px);
+  max-width: 94vw;
   margin:0 auto;
 }
 
@@ -633,7 +646,7 @@ html, body {
 .match-card.matched::after {
   content:'✓'; position:absolute; inset:0;
   display:flex; align-items:center; justify-content:center;
-  font-size:24px; font-weight:900; color:#fff;
+  font-size:20px; font-weight:900; color:#fff;
   background:rgba(102,187,106,.35);
   z-index:5; border-radius:var(--radius-sm);
 }
@@ -654,7 +667,7 @@ html, body {
   z-index:2;
 }
 .match-card .card-front::after {
-  content:'♡'; color:rgba(255,255,255,.5); font-size:24px;
+  content:'♡'; color:rgba(255,255,255,.5); font-size:clamp(14px, 4vh, 24px);
   text-shadow:0 0 8px rgba(255,255,255,.3);
 }
 .match-card .card-back {
@@ -668,17 +681,19 @@ html, body {
 }
 
 /* ============================================================
-   GAME 2: QUIZ
+   GAME 2: QUIZ ★ Must scroll if content is tall
    ============================================================ */
 #game-quiz {
   background:
     radial-gradient(ellipse at 60% 40%, rgba(255,212,184,.3) 0%, transparent 50%),
     linear-gradient(180deg,#FFF5F9 0%,var(--dino-cream) 100%);
+  justify-content:flex-start;
+  padding-top:10px;
 }
 .quiz-card {
   background:#fff; border-radius:var(--radius-lg);
-  padding:24px 22px; max-width:420px; width:92%;
-  box-shadow:var(--shadow-card); margin:8px auto;
+  padding:16px 18px; max-width:420px; width:92%;
+  box-shadow:var(--shadow-card); margin:4px auto;
   position:relative; overflow:hidden;
 }
 .quiz-card::before {
@@ -688,14 +703,14 @@ html, body {
   background-size:200% 100%; animation:shimmer 3s infinite;
 }
 .quiz-question {
-  font-size:16px; font-weight:700; color:var(--text-dark);
-  margin-bottom:16px; line-height:1.7;
+  font-size:14px; font-weight:700; color:var(--text-dark);
+  margin-bottom:10px; line-height:1.6;
 }
-.quiz-question .emoji { font-size:32px; display:block; margin-bottom:8px; }
-.quiz-options { display:flex; flex-direction:column; gap:8px; }
+.quiz-question .emoji { font-size:24px; display:block; margin-bottom:4px; }
+.quiz-options { display:flex; flex-direction:column; gap:6px; }
 .quiz-option {
   background:var(--melody-light); border:2px solid transparent;
-  border-radius:var(--radius-md); padding:12px 16px; font-size:14px;
+  border-radius:var(--radius-md); padding:10px 14px; font-size:13px;
   font-family:'Noto Sans TC',sans-serif; color:var(--text-dark);
   cursor:pointer; transition:all .3s; text-align:left;
 }
@@ -713,18 +728,18 @@ html, body {
   animation:shake .4s ease;
 }
 .quiz-extra {
-  margin-top:12px; padding:12px 14px; background:var(--dino-cream);
-  border-radius:var(--radius-md); font-size:14px; color:var(--melody-deep);
-  font-weight:700; line-height:1.7;
+  margin-top:8px; padding:10px 12px; background:var(--dino-cream);
+  border-radius:var(--radius-md); font-size:13px; color:var(--melody-deep);
+  font-weight:700; line-height:1.6;
   border-left:4px solid var(--melody-pink);
   display:none;
 }
 .quiz-extra.visible { display:block; animation:slideInRight .4s ease; }
 .quiz-next-btn {
-  display:none; margin-top:10px;
+  display:none; margin-top:8px;
   background:var(--melody-deep); color:#fff;
-  border:none; padding:9px 22px; border-radius:var(--radius-full);
-  font-size:13px; font-weight:700; cursor:pointer;
+  border:none; padding:8px 20px; border-radius:var(--radius-full);
+  font-size:12px; font-weight:700; cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;
   transition:all .2s;
 }
@@ -732,25 +747,27 @@ html, body {
 .quiz-next-btn:hover { background:var(--melody-hot); }
 
 /* ============================================================
-   GAME 3: SCRATCH CARD (刮刮樂)
+   GAME 3: SCRATCH CARD + PUZZLE
    ============================================================ */
 #game-scratch {
   background:
     radial-gradient(ellipse at 50% 30%, rgba(255,215,0,.2) 0%, transparent 50%),
     linear-gradient(180deg,#FFF5F9 0%,var(--dino-cream) 100%);
+  justify-content:flex-start;
+  padding-top:8px;
 }
 
 /* --- Phase 1: Scratch --- */
 .scratch-wrapper {
   position:relative;
-  width:auto; height:calc(100vh - 90px);
-  max-height:380px;
+  width:auto; height:calc(100vh - 100px);
+  max-height:340px;
   aspect-ratio: 4/3;
-  max-width:90vw;
-  margin:6px auto;
+  max-width:88vw;
+  margin:4px auto;
   border-radius:var(--radius-lg);
   overflow:hidden;
-  border:4px solid var(--melody-pink);
+  border:3px solid var(--melody-pink);
   box-shadow:var(--shadow-card), 0 0 40px rgba(255,133,162,.15);
 }
 .scratch-photo {
@@ -765,10 +782,10 @@ html, body {
   touch-action:none;
 }
 .scratch-progress {
-  margin-top:8px; text-align:center;
+  margin-top:6px; text-align:center;
 }
 .scratch-progress-bar {
-  width:200px; height:8px; margin:4px auto;
+  width:180px; height:6px; margin:3px auto;
   background:rgba(255,255,255,.4);
   border-radius:8px; overflow:hidden;
 }
@@ -778,7 +795,7 @@ html, body {
   border-radius:8px; transition:width .3s;
 }
 .scratch-hint {
-  font-size:12px; color:var(--text-light);
+  font-size:11px; color:var(--text-light);
   margin-top:2px;
 }
 
@@ -796,21 +813,21 @@ html, body {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap:3px;
-  height:calc(100vh - 90px);
-  max-height:380px;
+  height:calc(100vh - 100px);
+  max-height:340px;
   aspect-ratio:4/3;
-  max-width:90vw;
+  max-width:88vw;
   margin:4px auto;
   background:rgba(255,182,193,.15);
   border-radius:var(--radius-lg);
-  border:4px solid var(--melody-pink);
+  border:3px solid var(--melody-pink);
   box-shadow:var(--shadow-card);
   padding:3px;
   overflow:hidden;
 }
 
 .puzzle-tile {
-  border-radius:6px;
+  border-radius:5px;
   background-size:300% 300%;
   cursor:pointer;
   transition:transform .15s ease, box-shadow .15s ease;
@@ -836,29 +853,31 @@ html, body {
 }
 
 .puzzle-info {
-  display:flex; align-items:center; gap:16px;
-  margin-top:6px; font-size:13px; color:var(--text-light);
+  display:flex; align-items:center; gap:14px;
+  margin-top:4px; font-size:12px; color:var(--text-light);
 }
 .puzzle-info strong { color:var(--melody-deep); }
 .puzzle-hint-text {
-  font-size:11px; color:var(--text-light); margin-top:3px;
+  font-size:10px; color:var(--text-light); margin-top:2px;
 }
 
 /* ============================================================
-   UNLOCK / PHOTO REVEAL
+   UNLOCK / PHOTO REVEAL ★ Compact for mobile landscape
    ============================================================ */
 .unlock-overlay {
   display:none; position:absolute; inset:0;
   background:rgba(0,0,0,.4); z-index:200;
   align-items:center; justify-content:center;
   backdrop-filter:blur(4px);
+  padding:8px;
 }
 .unlock-overlay.active { display:flex; animation:fadeIn .3s ease; }
 .unlock-card {
   background:#fff; border-radius:var(--radius-lg);
-  padding:24px 22px; max-width:420px; width:88%;
+  padding:14px 18px; max-width:420px; width:92%;
+  max-height:92vh; overflow-y:auto;
   text-align:center; box-shadow:var(--shadow-card), var(--shadow-glow);
-  animation:popIn .5s ease; position:relative; overflow:hidden;
+  animation:popIn .5s ease; position:relative;
 }
 .unlock-card::before {
   content:''; position:absolute; top:0;left:0;
@@ -866,12 +885,12 @@ html, body {
   background:linear-gradient(90deg,var(--melody-pink),var(--gold),var(--melody-pink));
   background-size:200% 100%; animation:shimmer 3s infinite;
 }
-.unlock-icon { font-size:46px; margin-bottom:8px; animation:popIn .6s ease; }
-.unlock-title { font-size:18px; font-weight:900; color:var(--melody-deep); margin-bottom:4px; }
-.unlock-text { font-size:13px; color:var(--text-dark); line-height:1.9; margin:10px 0; white-space:pre-line; }
+.unlock-icon { font-size:36px; margin-bottom:4px; animation:popIn .6s ease; }
+.unlock-title { font-size:15px; font-weight:900; color:var(--melody-deep); margin-bottom:2px; }
+.unlock-text { font-size:12px; color:var(--text-dark); line-height:1.8; margin:6px 0; white-space:pre-line; }
 .unlock-photo {
-  width:100%; max-height:180px; border-radius:var(--radius-md);
-  overflow:hidden; margin:10px 0;
+  width:100%; max-height:clamp(100px, 30vh, 180px); border-radius:var(--radius-md);
+  overflow:hidden; margin:6px 0;
   border:3px solid var(--melody-pink);
   box-shadow:0 4px 15px rgba(0,0,0,.1);
   animation:rainbowBorder 4s linear infinite;
@@ -879,59 +898,63 @@ html, body {
 .unlock-photo img { width:100%; height:100%; object-fit:cover; display:block; }
 
 /* ============================================================
-   PASSWORD OVERLAY (Treasure Chest)
+   PASSWORD OVERLAY (Treasure Chest) ★ Compact for mobile
    ============================================================ */
 .password-overlay {
   display:none; position:absolute; inset:0; z-index:250;
   background:rgba(0,0,0,.55);
   align-items:center; justify-content:center;
   backdrop-filter:blur(6px);
+  padding:8px;
 }
 .password-overlay.active { display:flex; animation:fadeIn .4s ease; }
 .password-card {
   background:#fff; border-radius:var(--radius-lg);
-  padding:28px 24px; max-width:380px; width:88%;
+  padding:14px 20px; max-width:360px; width:90%;
+  max-height:92vh; overflow-y:auto;
   text-align:center; box-shadow:var(--shadow-card), 0 0 60px rgba(255,215,0,.2);
-  animation:popIn .5s ease; position:relative; overflow:hidden;
+  animation:popIn .5s ease; position:relative;
 }
 .password-card::before {
   content:''; position:absolute; top:0;left:0;
-  width:100%; height:5px;
+  width:100%; height:4px;
   background:linear-gradient(90deg,var(--gold),var(--melody-pink),var(--gold));
   background-size:200% 100%; animation:shimmer 3s infinite;
   border-radius:var(--radius-lg) var(--radius-lg) 0 0;
 }
 .password-chest {
-  font-size:64px; margin-bottom:6px;
+  font-size:clamp(36px, 10vh, 64px); margin-bottom:4px;
   animation:bounce 2s ease infinite;
   filter:drop-shadow(0 4px 12px rgba(255,215,0,.3));
 }
 .password-title {
-  font-size:22px; font-weight:900; color:var(--melody-deep);
-  margin-bottom:8px;
+  font-size:18px; font-weight:900; color:var(--melody-deep);
+  margin-bottom:6px;
 }
 .password-question {
-  font-size:15px; color:var(--text-dark); line-height:1.8; margin-bottom:14px;
+  font-size:13px; color:var(--text-dark); line-height:1.7; margin-bottom:10px;
 }
 .password-hint {
-  font-size:12px; color:var(--text-light);
+  font-size:11px; color:var(--text-light);
 }
 .password-input-row {
   display:flex; justify-content:center; margin-bottom:4px;
 }
 .password-input {
-  width:160px; height:50px; text-align:center;
-  font-size:28px; font-weight:900; letter-spacing:12px;
+  width:140px; height:44px; text-align:center;
+  font-size:24px; font-weight:900; letter-spacing:10px;
   border:3px solid var(--melody-pink);
   border-radius:var(--radius-md);
   color:var(--melody-deep); background:var(--melody-light);
   outline:none; font-family:'Noto Sans TC',sans-serif;
   transition:border-color .3s;
+  /* prevent mobile zoom on focus */
+  font-size:16px; transform:scale(1);
 }
 .password-input:focus { border-color:var(--melody-hot); box-shadow:0 0 20px rgba(255,92,149,.2); }
-.password-input::placeholder { letter-spacing:8px; color:rgba(255,133,162,.3); }
+.password-input::placeholder { letter-spacing:6px; color:rgba(255,133,162,.3); }
 .password-error {
-  font-size:12px; color:#ef5350; margin-top:6px;
+  font-size:11px; color:#ef5350; margin-top:4px;
   display:none;
 }
 .password-error.visible { display:block; animation:shake .4s ease; }
@@ -965,65 +988,57 @@ html, body {
   display:flex; align-items:center; justify-content:center;
 }
 .slideshow-photo img {
-  max-width:90%; max-height:85vh;
-  object-fit:contain; border-radius:var(--radius-lg);
-  border:3px solid var(--white-50);
+  max-width:88%; max-height:82vh;
+  object-fit:contain; border-radius:var(--radius-md);
+  border:2px solid var(--white-50);
   box-shadow:0 8px 40px rgba(0,0,0,.5);
   opacity:0; transform:scale(.85);
   animation:slideshowIn .8s ease forwards;
 }
-@keyframes slideshowIn {
-  0% { opacity:0; transform:scale(.85) rotate(-2deg); }
-  100% { opacity:1; transform:scale(1) rotate(0deg); }
-}
-@keyframes slideshowOut {
-  0% { opacity:1; transform:scale(1) rotate(0deg); }
-  100% { opacity:0; transform:scale(1.1) rotate(2deg); }
-}
 .slideshow-counter {
-  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
-  font-size:13px; color:var(--white-70);
-  background:rgba(0,0,0,.4); padding:4px 16px;
+  position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+  font-size:12px; color:var(--white-70);
+  background:rgba(0,0,0,.4); padding:3px 14px;
   border-radius:var(--radius-full); backdrop-filter:blur(6px);
 }
 
 /* ============================================================
-   LETTER SCREEN
+   LETTER SCREEN ★ Must scroll on mobile landscape
    ============================================================ */
 #screen-letter {
   display:none; position:absolute; inset:0; z-index:20;
   background:
     radial-gradient(ellipse at 50% 30%, rgba(255,215,0,.1) 0%, transparent 50%),
     linear-gradient(180deg, #FFF5F9 0%, #F8E8EF 50%, var(--melody-pink) 100%);
-  align-items:center; justify-content:center;
+  align-items:flex-start; justify-content:center;
   overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 #screen-letter.active { display:flex; animation:fadeIn .8s ease; }
 
 .letter-wrapper {
   display:flex; flex-direction:column; align-items:center;
-  padding:16px; max-width:520px; width:100%;
+  padding:12px 16px 24px; max-width:520px; width:100%;
+  margin:auto;
 }
 
 .letter-envelope-top {
-  width:80%; max-width:400px; height:40px;
+  width:80%; max-width:400px; height:clamp(20px, 6vh, 40px);
   background:linear-gradient(135deg, var(--melody-rose), var(--melody-deep));
   clip-path:polygon(0 100%, 50% 0%, 100% 100%);
-  margin-bottom:-4px; position:relative; z-index:1;
+  margin-bottom:-3px; position:relative; z-index:1;
   filter:drop-shadow(0 -2px 6px rgba(255,133,162,.2));
 }
 
 .letter-paper {
   background:
-    /* Faint lined paper effect */
     repeating-linear-gradient(
-      transparent, transparent 31px,
-      rgba(255,182,193,.12) 31px, rgba(255,182,193,.12) 32px
+      transparent, transparent 27px,
+      rgba(255,182,193,.1) 27px, rgba(255,182,193,.1) 28px
     ),
-    /* Paper texture */
     linear-gradient(135deg, #FFFAF5 0%, #FFF5EE 30%, #FFFAF5 60%, #FFF8F2 100%);
-  border-radius:4px 4px var(--radius-lg) var(--radius-lg);
-  padding:32px 28px 24px;
+  border-radius:3px 3px var(--radius-lg) var(--radius-lg);
+  padding:20px 22px 18px;
   width:100%;
   box-shadow:
     0 8px 32px rgba(90,61,74,.12),
@@ -1034,35 +1049,36 @@ html, body {
 }
 .letter-paper::before {
   content:'';
-  position:absolute; top:0; left:28px; right:28px; height:1px;
+  position:absolute; top:0; left:22px; right:22px; height:1px;
   background:rgba(255,182,193,.15);
 }
 
 .letter-deco-top {
-  text-align:center; font-size:32px; margin-bottom:12px;
+  text-align:center; font-size:24px; margin-bottom:8px;
   filter:drop-shadow(0 2px 4px rgba(255,133,162,.2));
 }
 
 .letter-body {
   font-family:'Caveat','Zen Maru Gothic',cursive;
-  font-size:17px; color:#5A4050;
-  line-height:2.2; white-space:pre-line;
+  font-size:clamp(14px, 3.5vh, 17px); color:#5A4050;
+  line-height:2; white-space:pre-line;
   text-align:left;
   letter-spacing:.3px;
 }
 
 .letter-sign {
-  font-family:'Caveat',cursive; font-size:22px;
-  color:var(--melody-deep); margin-top:20px;
+  font-family:'Caveat',cursive; font-size:clamp(16px, 4vh, 22px);
+  color:var(--melody-deep); margin-top:14px;
   text-align:right; padding-right:8px;
 }
 
 .letter-btn {
-  margin-top:20px;
-  font-size:15px; padding:14px 32px;
+  margin-top:14px; margin-bottom:8px;
+  font-size:clamp(12px, 3vh, 15px); padding:10px 24px;
   animation:heartbeat 2s ease infinite, popIn .5s ease;
   background:linear-gradient(135deg, var(--melody-hot), #FF3D7F);
   box-shadow:0 6px 25px rgba(255,61,127,.4);
+  flex-shrink:0;
 }
 
 /* --- Treasure Chest on map --- */
@@ -1087,12 +1103,12 @@ html, body {
    MUSIC CONTROL
    ============================================================ */
 .music-btn {
-  position:fixed; top:10px; right:10px; z-index:9999;
-  width:40px; height:40px; border-radius:50%;
+  position:fixed; top:8px; right:8px; z-index:9999;
+  width:36px; height:36px; border-radius:50%;
   background:var(--white-90);
   border:2px solid var(--melody-pink);
   display:flex; align-items:center; justify-content:center;
-  font-size:18px; cursor:pointer;
+  font-size:16px; cursor:pointer;
   box-shadow:0 2px 10px rgba(0,0,0,.1);
   backdrop-filter:blur(6px);
   transition:all .2s;
@@ -1101,15 +1117,42 @@ html, body {
 .music-btn.playing { animation:heartbeat 1.5s ease infinite; }
 
 /* ============================================================
-   RESPONSIVE TWEAKS
+   RESPONSIVE — short landscape (mobile)
    ============================================================ */
-@media (max-height:400px) {
-  .hud { padding:4px 12px; }
-  .hud-item { font-size:11px; }
-  .joystick-container { bottom:12px; left:12px; width:90px; height:90px; }
-  .joystick-base { width:90px; height:90px; }
-  .joystick-stick { width:38px; height:38px; }
-  .interact-btn { width:56px; height:56px; font-size:11px; bottom:30px; right:16px; }
-  .match-grid { gap:4px; }
-  .opening-title { font-size:38px; }
+@media (max-height:420px) {
+  .hud { padding:3px 10px; }
+  .hud-item { font-size:10px; }
+  .hud-hint { font-size:8px; padding:2px 5px; }
+  .joystick-container { bottom:10px; left:10px; width:80px; height:80px; }
+  .joystick-base { width:80px; height:80px; }
+  .joystick-stick { width:34px; height:34px; }
+  .interact-btn { width:50px; height:50px; font-size:10px; bottom:24px; right:14px; }
+  .match-grid { gap:3px; height:calc(100vh - 48px); width:calc(100vh - 48px); }
+  .opening-title { font-size:28px; }
+  .opening-subtitle { font-size:11px; margin:2px 0 4px; line-height:1.5; }
+  .opening-date { font-size:10px; margin-top:2px; }
+  .dialogue-npc-icon { font-size:28px; margin-bottom:2px; }
+  .dialogue-npc-name { font-size:11px; margin-bottom:4px; }
+  .dialogue-text { font-size:11px; line-height:1.6; }
+  .dialogue-close { padding:5px 18px; font-size:11px; margin-top:6px; }
+  .game-title-area .stage-title { font-size:14px; }
+  .game-title-area .stage-desc { font-size:10px; }
+  .quiz-question { font-size:12px; margin-bottom:6px; }
+  .quiz-question .emoji { font-size:20px; margin-bottom:2px; }
+  .quiz-option { padding:7px 10px; font-size:11px; }
+  .quiz-extra { font-size:11px; padding:8px 10px; margin-top:6px; }
+  .quiz-next-btn { padding:6px 16px; font-size:11px; margin-top:6px; }
+  .scratch-wrapper { max-height:calc(100vh - 88px); }
+  .puzzle-board { max-height:calc(100vh - 88px); }
+  .unlock-icon { font-size:28px; margin-bottom:2px; }
+  .unlock-title { font-size:14px; }
+  .unlock-text { font-size:11px; line-height:1.6; margin:4px 0; }
+  .unlock-photo { max-height:25vh; margin:4px 0; }
+  .password-chest { font-size:36px; }
+  .password-title { font-size:15px; margin-bottom:4px; }
+  .password-question { font-size:12px; margin-bottom:6px; }
+  .password-input { width:120px; height:38px; }
+  .letter-body { font-size:13px; line-height:1.8; }
+  .letter-deco-top { font-size:20px; margin-bottom:4px; }
+  .letter-paper { padding:14px 16px 12px; }
 }
