@@ -44,31 +44,8 @@ html, body {
   -webkit-user-select:none;
 }
 
-/* ---------- FORCE LANDSCAPE ---------- */
-#portrait-warning {
-  display:none;
-  position:fixed; inset:0; z-index:99999;
-  background:linear-gradient(135deg, var(--melody-light), var(--melody-pink));
-  flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; padding:40px;
-}
-#portrait-warning .rotate-icon {
-  font-size:64px; margin-bottom:20px;
-  animation: rotateHint 2s ease infinite;
-}
-#portrait-warning .rotate-text {
-  font-size:18px; font-weight:700;
-  color:var(--melody-deep); line-height:1.8;
-}
-@keyframes rotateHint {
-  0%,100% { transform:rotate(0deg); }
-  25% { transform:rotate(-20deg); }
-  75% { transform:rotate(20deg); }
-}
-@media (orientation:portrait) {
-  #portrait-warning { display:flex !important; }
-  #game-container { display:none !important; }
-}
+/* ---------- Portrait warning — hidden, both orientations allowed ---------- */
+#portrait-warning { display:none !important; }
 
 /* ---------- Game Container (landscape wrapper) ---------- */
 #game-container {
@@ -642,9 +619,9 @@ html, body {
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
   gap:4px;
-  height: calc(100vh - 56px);
-  width: calc(100vh - 56px);
-  max-width: 94vw;
+  --grid-size: min(calc(100vh - 56px), calc(100vw - 24px));
+  height: var(--grid-size);
+  width: var(--grid-size);
   margin:0 auto;
 }
 
@@ -776,7 +753,8 @@ html, body {
 /* --- Phase 1: Scratch --- */
 .scratch-wrapper {
   position:relative;
-  width:auto; height:calc(100vh - 100px);
+  width:auto;
+  height:min(calc(100vh - 120px), calc(88vw * 0.75));
   max-height:340px;
   aspect-ratio: 4/3;
   max-width:88vw;
@@ -829,7 +807,7 @@ html, body {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   gap:3px;
-  height:calc(100vh - 100px);
+  height:min(calc(100vh - 120px), calc(88vw * 0.75));
   max-height:340px;
   aspect-ratio:4/3;
   max-width:88vw;
@@ -1143,7 +1121,7 @@ html, body {
   .joystick-base { width:80px; height:80px; }
   .joystick-stick { width:34px; height:34px; }
   .interact-btn { width:50px; height:50px; font-size:10px; right:14px; }
-  .match-grid { gap:3px; height:calc(100vh - 48px); width:calc(100vh - 48px); }
+  .match-grid { gap:3px; --grid-size: min(calc(100vh - 48px), calc(100vw - 16px)); }
   .opening-title { font-size:28px; }
   .opening-subtitle { font-size:11px; margin:2px 0 4px; line-height:1.5; }
   .opening-date { font-size:10px; margin-top:2px; }
@@ -1171,4 +1149,64 @@ html, body {
   .letter-body { font-size:13px; line-height:1.8; }
   .letter-deco-top { font-size:20px; margin-bottom:4px; }
   .letter-paper { padding:14px 16px 12px; }
+}
+
+/* ============================================================
+   RESPONSIVE — portrait orientation
+   ============================================================ */
+@media (orientation:portrait) {
+  /* Joystick: move to bottom-left for thumb reach */
+  .joystick-container {
+    bottom:24px; left:20px;
+    transform:none;
+  }
+  .interact-btn {
+    bottom:24px; right:20px;
+    transform:none;
+  }
+
+  /* Match grid: constrain by viewport width in portrait */
+  .match-grid {
+    --grid-size: min(calc(100vh - 56px), calc(100vw - 24px));
+  }
+
+  /* Scratch & puzzle: let aspect-ratio + max-width do the work */
+  .scratch-wrapper {
+    height:auto;
+    width:88vw;
+    max-height:min(calc(100vh - 140px), 340px);
+  }
+  .puzzle-board {
+    height:auto;
+    width:88vw;
+    max-height:min(calc(100vh - 140px), 340px);
+  }
+
+  /* Game screens: ensure scroll works in portrait */
+  .game-screen {
+    justify-content:flex-start;
+    padding-top:10px;
+  }
+  #game-memory {
+    justify-content:center;
+  }
+
+  /* Quiz card: limit height so it scrolls */
+  .quiz-card {
+    max-height:calc(100vh - 100px);
+    overflow-y:auto;
+  }
+
+  /* Password overlay — ensure card doesn't overflow */
+  .password-card {
+    max-height:85vh;
+  }
+
+  /* Letter: already has overflow-y:auto, just adjust padding */
+  .letter-wrapper {
+    padding:16px 12px 32px;
+  }
+
+  /* HUD stays compact */
+  .hud { padding:4px 10px; }
 }
